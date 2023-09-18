@@ -1,14 +1,10 @@
 let myMap = L.map("map", {
-    center: [37.09,-95.71],
+    center: [37.0902,-95.7129],
     zoom: 5
-   
   });
-  
-// Adding the tile layer
-  
-  
+
 // Use this link to get the GeoJSON data.
-  let link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+let link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
   
 // function to assign color based on depth
 function getcolor(depth){
@@ -33,9 +29,9 @@ function getcolor(depth){
 // Getting data from URL
 d3.json(link).then(function(data){
 
-console.log(data)
 let markers=data.features.length
 
+// Adding the tile layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(myMap);
@@ -53,9 +49,7 @@ for (let i=0; i < markers;i++)
         opacity: .8, // setting border opacity
         fillOpacity: 1 // setting fill opacity
     }).bindPopup(`<strong>Magnitude:</strong> ${data.features[i].properties.mag}<hr> <strong>Location:</strong> ${data.features[i].properties.place}<hr> <strong>Depth:</strong> ${data.features[i].geometry.coordinates[2]}`)
-    .addTo(myMap)
-
-    
+    .addTo(myMap)  
 }
 
 // Set up the legend.
@@ -67,14 +61,10 @@ legend.onAdd = function() {
   for (let i=0;i < depth.length;i++)
   {
     div.innerHTML += '<i style="background:' + getcolor(depth[i] + 1) + '"></i> &ensp;' + depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
-
   }
   return div;
 };
 
 // Adding the legend to the map
 legend.addTo(myMap);
-
 });
-
-
